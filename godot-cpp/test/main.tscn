@@ -1,0 +1,106 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://TSCN/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://TSCN/Asteroid.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/gdnative/GameUI.gdns" type="Script" id=3]
+[ext_resource path="res://gdexample.gdns" type="Script" id=4]
+[ext_resource path="res://Assets/BG.png" type="Texture" id=6]
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 4 )
+myAssteroid = ExtResource( 2 )
+
+[node name="Asteroid" parent="." instance=ExtResource( 2 )]
+position = Vector2( 560, 81 )
+
+[node name="Space_bg" type="Sprite" parent="."]
+position = Vector2( 511, 302 )
+scale = Vector2( 0.65, 0.566 )
+texture = ExtResource( 6 )
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 527, 544 )
+
+[node name="Countdown" type="Timer" parent="."]
+one_shot = true
+
+[node name="SpawnTimer" type="Timer" parent="."]
+
+[node name="GameUI" type="CanvasLayer" parent="."]
+script = ExtResource( 3 )
+
+[node name="GameTimer" type="Timer" parent="GameUI"]
+autostart = true
+
+[node name="LoseScreen" type="Node2D" parent="GameUI"]
+
+[node name="LoseBG" type="Sprite" parent="GameUI/LoseScreen"]
+modulate = Color( 0.976471, 0.027451, 0.027451, 1 )
+position = Vector2( 513, 293 )
+scale = Vector2( 0.715556, 0.61713 )
+texture = ExtResource( 6 )
+
+[node name="LoseText" type="Label" parent="GameUI/LoseScreen"]
+margin_left = 410.0
+margin_top = 255.0
+margin_right = 662.0
+margin_bottom = 394.0
+text = "You suck!"
+align = 1
+autowrap = true
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WinScreen" type="Node2D" parent="GameUI"]
+
+[node name="WinBG" type="Sprite" parent="GameUI/WinScreen"]
+modulate = Color( 0.12549, 0.976471, 0.027451, 1 )
+position = Vector2( 513, 293 )
+scale = Vector2( 0.715556, 0.61713 )
+texture = ExtResource( 6 )
+
+[node name="WinText" type="Label" parent="GameUI/WinScreen"]
+margin_left = 410.0
+margin_top = 255.0
+margin_right = 662.0
+margin_bottom = 394.0
+text = "You win!"
+align = 1
+autowrap = true
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreLabel" type="Label" parent="GameUI"]
+margin_left = 8.0
+margin_top = 65.0
+margin_right = 215.0
+margin_bottom = 97.0
+rect_scale = Vector2( 2, 2 )
+text = "Assteroids dodged counter: "
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimeLabel" type="Label" parent="GameUI"]
+margin_left = -112.0
+margin_top = -52.0
+margin_right = 4.00003
+margin_bottom = 3.0
+rect_scale = Vector2( 3, 3 )
+text = "1:00"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="body_entered" from="Player" to="Player" method="_on_Player_body_entered"]
+[connection signal="hit" from="Player" to="." method="_hit"]
+[connection signal="timeout" from="Countdown" to="." method="_on_CountDown"]
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer"]
+[connection signal="timeout" from="GameUI/GameTimer" to="GameUI" method="StartGameTimer"]
